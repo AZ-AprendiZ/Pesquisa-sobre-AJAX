@@ -1,0 +1,56 @@
+
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(2, 32, 14, 0.205);
+    max-width: 400px;
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+
+.btn_endereco{
+    padding: 9px 9px 9px 9px;
+    font-size: 14px;
+    width: 120px;
+    margin: 20px 5px 10px 5px;
+
+}
+
+#endereco_ajax:hover {
+    background-color: #d41717;
+}
+#endereco_fetch:hover {
+    background-color: #eaf129;
+}
+#endereco_async:hover {
+    background-color: #1750d4;
+}
+
+
+#endereco {
+    margin-top: 20px;
+}
+
+input[readonly] {
+    background-color: #e9ecef;
+}
+
+
+
+

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicação sobre AJAX</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_requisicao.css">
+    <!--  -->
+    <!-- Highlight.js  para formato de código JS em HTML   -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>   
+    <script>hljs.initHighlightingOnLoad();</script>
+    <!-- Fim da importação do Highlight.js -->
+
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <div id="cabecalho">
+        <h2>Pesquisa sobre AJAX, promisses, fetch API, Async/Aw</h2>
+        <div class="linha-texto">
+            <p><strong>Disciplina: </strong>Linguagem de Programação para WEB 1</p>
+            <p><strong>Professor:</strong> Márcio Araya</p>
+            <p><strong>Turma:</strong> ADS 2º Semestre</p>
+            <p><strong>Desenvolvedor:</strong> Ubiratã Rodrigues</p>
+        </div>
+    </div>
+    
+<button id="parte1" onclick="esconderPesquisas('ex-1','parte1')">Esconder pesquisas</button>
+<div id="ex-1" style="display: block;">
+    
+    <h3><hr> Breve definição e pequenos trechos de código para exemplificar. <br><br> A) Assincronismo. <br></h3>
+    
+        <!-- BOTÕES - A) -->
+        <div id="botoes-container">
+            <!-- Botão 1: Explicação sobre AJAX -->
+            <button onclick="mostrarTexto('texto-ajax')"> 1 - Explicação sobre AJAX</button>
+            <div class="pesquisa" id="texto-ajax" style="display: none;">
+                <h3>O que é AJAX?</h3>
+                <p><strong>AJAX (Asynchronous JavaScript and XML)</strong> é uma técnica usada no desenvolvimento web para permitir que páginas carreguem e atualizem dados de um servidor de forma assíncrona, ou seja, sem recarregar toda a página. Isso melhora a experiência do usuário, pois apenas partes específicas da página são atualizadas, em vez de recarregar tudo.</p>
+    
+                <h3>Componentes principais do AJAX:</h3>
+                <ul>
+                    <li><strong>JavaScript</strong> – Faz as requisições ao servidor e manipula a resposta.</li>
+                    <li><strong>XMLHttpRequest</strong> – O objeto que possibilita a comunicação com o servidor de forma assíncrona.</li>
+                    <li><strong>XML/JSON/HTML</strong> – O formato dos dados trocados entre o navegador e o servidor (XML foi o formato original, mas hoje JSON é mais comum).</li>
+                    <li><strong>Servidor</strong> – Processa a solicitação e envia a resposta de volta.</li>
+                </ul>
+    
+                <p>Com AJAX, um site pode carregar novos dados dinamicamente, como em feeds de redes sociais, sem recarregar a página inteira.</p>
+                <p>Exemplo: </p>
+                <pre><code class="JavaScript"> // HTML
+    &lt;button id="carregarDadosBtn"&gt;Carregar Dados&lt;/button&gt;
+    &lt;div id="conteinerDados"&gt;&lt;/div&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+    
+    // JavaScript
+    
+    document.getElementById("carregarDadosBtn").addEventListener("click", function() {
+        // Cria um objeto XMLHttpRequest
+        var xhr = new XMLHttpRequest();
+    
+        // Define o tipo de requisição: GET, e a URL
+        xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true);
+    
+        // Configura uma função para lidar com a resposta quando a requisição estiver completa
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Faz o parse da resposta JSON
+                var resposta = JSON.parse(xhr.responseText);
+    
+                // Exibe os dados da resposta na página
+                document.getElementById("conteinerDados").innerHTML =
+                    "&lt;h3&gt;" + resposta.title + "&lt;/h3&gt;&lt;p&gt;" + resposta.body + "&lt;/p&gt;";
+            }
+        };
+    
+        // Envia a requisição
+        xhr.send();
+    });        </code></pre>
+            </div>
+    
+            <!-- Botão 2: Explicação sobre Promises -->
+            <button onclick="mostrarTexto('texto-promises')">2 - Explicação sobre Promises</button>
+            <div class="pesquisa" id="texto-promises" style="display: none;">
+    
+            <h3>O que são Promises?</h3>
+        <p>
+            <strong>Promises</strong> são uma forma de lidar com operações assíncronas em JavaScript, permitindo que você organize seu código de maneira mais clara e gerencie a execução de tarefas que podem demorar um tempo indeterminado, como requisições AJAX, leitura de arquivos ou chamadas a APIs. Uma Promise representa um valor que pode estar disponível <strong>agora</strong>, <strong>no futuro</strong>, ou <strong>nunca</strong>.
+        </p>
+    
+        <h3>Como funcionam?</h3>
+        <p>
+            Uma Promise pode estar em um dos três estados:
+        </p>
+        <ul>
+            <li><strong>Pending (Pendente):</strong> A operação assíncrona ainda está sendo processada.</li>
+            <li><strong>Fulfilled (Resolvida):</strong> A operação foi concluída com sucesso, e a Promise foi "resolvida", entregando o valor esperado.</li>
+            <li><strong>Rejected (Rejeitada):</strong> A operação falhou, e a Promise foi "rejeitada", com um erro sendo retornado.</li>
+        </ul>
+        <p>
+            Quando você trabalha com Promises, pode usar dois métodos principais:
+        </p>
+        <ul>
+            <li><strong>.then()</strong>: Usado para tratar o sucesso da operação e acessar o valor retornado.</li>
+            <li><strong>.catch()</strong>: Usado para tratar erros, caso a operação falhe.</li>
+        </ul>
+    
+        <p>Exemplo:</p>
+        <pre><code class="JavaScript"> // JavaScript
+    
+        // Criando uma nova Promise
+    const minhaPromise = new Promise((resolve, reject) => {
+        // Simulando uma operação assíncrona com setTimeout
+        setTimeout(() => {
+            const sucesso = true; // Simula se a operação foi bem-sucedida ou não
+    
+            if (sucesso) {
+                resolve("Operação realizada com sucesso!");
+            } else {
+                reject("Ocorreu um erro na operação.");
+            }
+        }, 2000); // Espera 2 segundos antes de finalizar
+    });
+    
+    minhaPromise
+        .then((mensagem) => {
+            console.log(mensagem); // Executa quando a Promise é resolvida
+        })
+        .catch((erro) => {
+            console.error(erro); // Executa quando a Promise é rejeitada
+        }); </code></pre>
+            </div>
+    
+            <!-- Botão 3: Explicação sobre Fetch API -->
+            <button onclick="mostrarTexto('texto-fetch')">3 - Explicação sobre Fetch API</button>
+            <div class="pesquisa" id="texto-fetch" style="display: none;">
+                <p>A <strong>Fetch API</strong> é uma interface JavaScript que permite realizar requisições HTTP de forma <strong>assíncrona</strong>, tornando suas aplicações web mais <strong>responsivas</strong>. Ao buscar dados de fontes externas, como APIs, sem interromper a execução do código, a Fetch API contribui para a criação de <strong>interfaces mais interativas</strong> e <strong>experiências de usuário mais agradáveis</strong>. <br>
+                Principais funções:</p><br>
+                <p><strong>fetch():</strong> A função principal. Ela retorna uma Promise.</p>
+                <p><strong>Promise:</strong> Representa um valor que pode ser retornado no futuro. Se a requisição for bem-sucedida, a Promise é resolvida, caso contrário, é rejeitada.</p>
+                <p><strong>then():</strong> É usado para tratar o resultado da Promise quando ela é resolvida (requisição bem-sucedida).</p>
+                <p><strong>catch():</strong> É usado para tratar erros caso a Promise seja rejeitada (requisição com falha).</p><br>
+                <p>Exemplo:</p>
+    
+                <pre><code class="JavaScript"> //HTML
+    &lt;div id="resultado"&gt; &lt;/div&gt;
+    
+    &lt;script&gt;
+    // URL da API que queremos consultar
+    const apiUrl = 'https://api.example.com/dados';
+    
+    // Fazendo a requisição GET para a API
+    fetch(apiUrl)
+      .then(response => response.json()) // Convertendo a resposta para JSON
+      .then(data => {
+        // Exibindo os dados na página (por exemplo, em um elemento com o id "resultado")
+        const resultadoElement = document.getElementById('resultado');
+        resultadoElement.textContent = data.mensagem; // Substitua "mensagem" pelo nome da propriedade que você quer exibir
+      })
+      .catch(error => {
+        console.error('Erro ao buscar dados:', error);
+      });
+    &lt;/script&gt; </code></pre>
+            </div>
+    
+            <!-- Botão 4: Explicação sobre Async/Await -->
+            <button onclick="mostrarTexto('texto-async')">4 - Explicação sobre Async/Await</button>
+            <div class="pesquisa" id="texto-async" style="display: none;">
+                <p><strong>Async/Await</strong> é uma sintaxe mais limpa e intuitiva para lidar com operações assíncronas em JavaScript, baseada em Promises. Ela torna o código mais legível e fácil de entender, especialmente quando se trata de lidar com múltiplas operações assíncronas encadeadas.</p><br>
+    
+                <p>Como funciona:</p>
+                <ul>
+                    <li><strong>async:</strong> Quando uma função é declarada como async, ela retorna implicitamente uma Promise.</li>
+                    <li><strong>await:</strong> A palavra-chave await é usada dentro de uma função async para esperar que uma Promise seja resolvida antes de continuar a execução.</li>
+                </ul><br>
+    
+                <p>Exemplo:</p>
+                <pre><code class="JavaScript"> //JavaScript
+    async function fetchData() {
+        try {
+            const response = await fetch('https://api.example.com/data');
+            const data = await response.json();
+            console.log(data);
+            } catch (error) {
+            console.error('Erro:', error);
+            }
+        }
+    
+        fetchData();</code></pre>
+            </div>
+    
+            <!-- Botão 5: Vantagens/Desvantagens -->
+            <button class="elemento_abaixo" onclick="mostrarTexto('texto-vantagens')">5 - Quais vantagens/desvantagens de usar cada uma das opções acima?</button>
+            <!-- C é loko, Olha essa abreviação:
+             div.pesquisa#texto-vantagens[style="display:none;"]>p -->
+            <div class="pesquisa" id="texto-vantagens" style="display: none;">
+                <ul>
+                        <li><strong>AJAX:</strong> Flexível, mas usa um objeto XMLHttpRequest mais verboso.</li><br>
+                        <li><strong>Promises:</strong> Simples para lidar com fluxos assíncronos, mas podem se tornar confusas se encadeadas excessivamente.</li><br>
+                        <li><strong>Fetch API:</strong> Mais moderna e baseada em Promises, mas não lida bem com todos os tipos de erros.</li><br>
+                        <li><strong>Async/Await:</strong> Torna o código assíncrono mais legível, mas depende de Promises e pode exigir tratamento cuidadoso de erros.</li><br>
+                    </ul>
+    
+                </p><br>
+            </div>
+    
+            <!-- BOTÕES - B) -->
+            <h3 class="elemento_abaixo">B) outros tópicos</h3>
+    
+            <!-- Botão 1: Explicação sobre Hoisting -->
+            <button onclick="mostrarTexto('texto-hoisting')"> 1 - Explicação sobre Hoisting</button>
+            <div class="pesquisa" id="texto-hoisting" style="display: none;">
+                <p>
+                    O <strong>Hoisting</strong> é um comportamento do JavaScript que eleva declarações de variáveis e funções para o topo do seu escopo antes da execução do código. Isso significa que você pode usar variáveis e funções antes de declará-las. Para variáveis declaradas com <strong>var</strong>, a declaração é "hoistada", mas a inicialização não é; portanto, seu valor será <strong>undefined</strong> até que a atribuição ocorra. Já variáveis declaradas com <strong>let</strong> e <strong>const</strong> também são hoistadas, mas geram um erro se acessadas antes da inicialização devido à <strong>zona morta temporal</strong> (TDZ). Funções declaradas são totalmente hoistadas, permitindo chamadas antes de sua definição, enquanto expressões de função atribuídas a variáveis são tratadas como variáveis, resultando em um erro se chamadas antes da atribuição. Para evitar confusões, é uma boa prática declarar variáveis e funções no início do escopo.
+                </p><br><p>Exemplo:</p>
+    
+                <pre><code class="JavaScript">// JavaScript
+    
+    // Exemplo de hoisting com 'var'
+    console.log(a); // undefined (hoisting da declaração, mas não da inicialização)
+    var a = 10;
+    console.log(a); // 10
+    
+    // Exemplo de hoisting com 'let' (mesmo efeito com 'const')
+    console.log(b); // ReferenceError: Cannot access 'b' before initialization
+    let b = 20;
+    console.log(b); // 20
+    
+    // Exemplo de hoisting com função declarada
+    myFunction(); // "Hello from myFunction!" (hoisting da função inteira)
+    
+    function myFunction() {
+        console.log("Hello from myFunction!");
+    }
+    
+    // Exemplo de hoisting com expressão de função
+    myExpression(); // TypeError: myExpression is not a function
+    
+    var myExpression = function() {
+        console.log("Hello from myExpression!");
+    };
+    
+    myExpression();
+    // "Hello from myExpression!" (executa normalmente depois da atribuição)</code></pre>
+            </div>
+    
+            <!-- Botão 2: Explicação sobre Arrow Functions -->
+            <button onclick="mostrarTexto('texto-arrowfunctions')"> 2 - Explicação sobre Arrow Functions</button>
+            <div class="pesquisa" id="texto-arrowfunctions" style="display: none;">
+                <p>
+                    As <strong>Arrow Functions</strong>, introduzidas no ES6, são uma forma mais concisa de escrever funções em JavaScript. Elas utilizam a sintaxe <strong>=></strong>, permitindo omitir a palavra-chave <strong>function</strong> e as chaves, em alguns casos, se a função consistir em uma única expressão. <br><br> Por exemplo, a função <code>const add = (a, b) => a + b;</code> é equivalente a uma função tradicional, mas mais curta. Um aspecto importante das arrow functions é que elas não possuem seu próprio <strong>this</strong>, o que significa que o valor de <strong>this</strong> dentro de uma arrow function é herdado do escopo onde a função foi definida. Isso as torna úteis em situações onde é necessário manter o contexto de <strong>this</strong>, como em callbacks e métodos de objetos. No entanto, como não podem ser usadas como construtores, não devem ser utilizadas em casos onde você precisa de uma função que crie instâncias de objetos.
+                </p><br><p>Exemplo:</p>
+    
+                <pre><code class="JavaScript">// JavaScript
+    
+    // Função tradicional
+    function somar(a, b) {
+        return a + b;
+    }
+    
+    // Usando Arrow Function
+    const somarArrow = (a, b) => a + b;
+    
+    console.log(somar(2, 3));        // Saída: 5
+    console.log(somarArrow(2, 3));   // Saída: 5
+    
+    
+    // Outro contexto para entender mais as diferenças:
+    
+    // Função normal
+    function Pessoa() {
+        this.idade = 0;
+    
+        setInterval(function() {
+            this.idade++;
+            console.log(this.idade); // 'this' não se refere ao objeto 'Pessoa'
+        }, 1000);
+    }
+    
+    const p = new Pessoa();
+    
+    // Arrow Function
+    function Pessoa() {
+        this.idade = 0;
+    
+        setInterval(() => {
+            this.idade++;
+            console.log(this.idade); // 'this' se refere ao objeto 'Pessoa'
+        }, 1000);
+    }
+    
+    const p = new Pessoa();</code></pre>
+            </div>
+    
+            <!-- Botão 3: Explicação sobre Destructuring -->
+            <button onclick="mostrarTexto('texto-destructuring')"> 3 - Explicação sobre Destructuring</button>
+            <div class="pesquisa" id="texto-destructuring" style="display: none;">
+                <p>A <strong> desestruturação</strong> é um recurso poderoso do JavaScript que permite <strong>extrair</strong> valores de arrays ou propriedades de objetos em variáveis <strong>distintas</strong>, de forma mais concisa e legível. Em vez de acessar cada elemento ou propriedade individualmente, você pode <strong>"desempacotar"</strong> os valores diretamente nas <strong>variáveis desejadas</strong>.</p>
+    
+    
+                <pre><code class="JavaScript">// JavaScript
+    
+    // Destructuring com variáveis:
+    const numeros = [1, 2, 3];
+    
+    // Desestruturando em variáveis separadas
+    const [primeiro, segundo, terceiro] = numeros;
+    
+    console.log(primeiro); // 1
+    console.log(segundo); // 2
+    console.log(terceiro); // 3
+    
+    // Destructuring com objetos:
+    const pessoa = {
+        nome: 'João',
+        idade: 30,
+        cidade: 'São Paulo'
+    };
+    
+    // Desestruturando em variáveis com os mesmos nomes das propriedades
+    const { nome, idade, cidade } = pessoa;
+    
+    console.log(nome); // João
+    console.log(idade); // 30
+    console.log(cidade); // São Paulo </code></pre>
+            </div>
+    
+            <!-- Botão 4: Explicação sobre Closure-->
+            <button onclick="mostrarTexto('texto-closure')"> 4 - Explicação sobre Closure</button>
+            <div class="pesquisa" id="texto-closure" style="display: none;">
+                <p><strong>Um closure</strong> em JavaScript é uma função que "lembra" seu escopo léxico, mesmo quando é executada fora desse escopo. Em outras palavras, uma closure tem acesso a variáveis que foram declaradas fora de seu corpo, mas dentro do escopo onde ela foi definida.</p><br><p>Exemplo:</p>
+    
+    
+                <pre><code class="JavaScript">// JavaScript
+    function criarContador() {
+        let contador = 0;
+        return function() {
+            contador++;
+            return contador;
+        };
+        }
+    
+        const meuContador = criarContador();
+        console.log(meuContador()); // 1
+        console.log(meuContador()); // 2 </code></pre>
+                <p>A função <code>criarContador</code> retorna outra função (o closure). A variável <strong><code>contador</code></strong> está dentro do escopo da função <code>criarContador</code>, mas é acessível pela função retornada. Cada vez que chamamos <strong><code>meuContador</code></strong>, o valor de <strong><code>contador</code></strong> é incrementado, mesmo que a função <code>criarContador</code> já tenha retornado.</p>
+            </div>
+        </div>
+</div>
+    
+<!-- Finalizando as Pesquisas -- Começando as requisições -->
+<br>
+<h2><hr>The XMLHttpRequest Object</h2>
+
+<form id="cepform">
+    <label for="cep">CEP:</label>
+    <input type="text" id="cep" name="cep" maxlength="10" placeholder="00000-000" required>
+
+    <button class="btn_endereco" id="endereco_ajax" type="button" onclick="buscarEnderecoAjax()">Buscar Endereço com AJAX</button>
+
+    <button class="btn_endereco" id="endereco_fetch" type="button" 
+    onclick="buscarEnderecoFetch()">Buscar Endereço com Fetch API</button>
+    
+    <button class="btn_endereco" id="endereco_async" type="button" onclick="buscarEnderecoAsync()">Buscar Endereço com Async/Await</button>
+
+
+
+    <!-- Logradouro, Complemento, Bairro, Cidade, UF -->
+    <div id="endereco">
+        <label for="logradouro">Logradouro:</label>
+        <input type="text" id="logradouro" name="logradouro" readonly>
+
+        <label for="complemento">Complemento:</label>
+        <input type="text" id="complemento" name="complemento" readonly>
+
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" name="bairro" readonly>
+
+        <label for="cidade">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" readonly>
+
+        <label for="uf">UF:</label>
+        <input type="text" id="uf" name="uf" readonly>
+
+    </div>
+</form>
+
+<script src="script.js"></script>
+</body>
+</html>
